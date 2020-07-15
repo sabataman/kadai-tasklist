@@ -42,12 +42,15 @@ class TasksController extends Controller
     public function create()
     {
         //
-        if(Auth::check()){
+        
         $task = new Task;
-        }
+        
+        if (Auth::check()) {
         return view('tasks.create', [
             'task' => $task,
             ]);
+        }
+        return redirect('/');
     }
 
     /**
@@ -105,11 +108,13 @@ class TasksController extends Controller
     public function edit($id)
     {
         //
-        if (Auth::check()){
+        
         $task = \App\Task::findOrFail($id);
-        }
+        
+        if (\Auth::id() === $task->user_id){
             return view('tasks.edit', [
             'task' => $task,]);
+        }
         
         
             return redirect('/');
