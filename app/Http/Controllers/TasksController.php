@@ -42,8 +42,9 @@ class TasksController extends Controller
     public function create()
     {
         //
+        if(Auth::check()){
         $task = new Task;
-        
+        }
         return view('tasks.create', [
             'task' => $task,
             ]);
@@ -104,9 +105,9 @@ class TasksController extends Controller
     public function edit($id)
     {
         //
+        if (Auth::check()){
         $task = \App\Task::findOrFail($id);
-        
-        
+        }
             return view('tasks.edit', [
             'task' => $task,]);
         
@@ -130,11 +131,12 @@ class TasksController extends Controller
             'status' => 'required|max:10',
             'content' => 'required|max:255',
             ]);
-            
+        if (\Auth::id() === $task->user_id) {
         $task = Task::findOrFail($id);
         $task ->status = $request->status;
         $task->content = $request->content;
         $task->save();
+        }
         
         return redirect('/');
     }
